@@ -32,6 +32,7 @@ const Warnings = () => {
               onClick={fetchAssistantId}
               disabled={loading}
               className={styles.button}
+              type="button"
             >
               {loading ? "Loading..." : "Create Assistant"}
             </button>

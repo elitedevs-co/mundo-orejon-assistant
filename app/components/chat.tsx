@@ -5,8 +5,8 @@ import styles from "./chat.module.css";
 import { AssistantStream } from "openai/lib/AssistantStream";
 import Markdown from "react-markdown";
 // @ts-expect-error - no types for this yet
-import { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
-import { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
+import type { AssistantStreamEvent } from "openai/resources/beta/assistants/assistants";
+import type { RequiredActionFunctionToolCall } from "openai/resources/beta/threads/runs/runs";
 
 type MessageProps = {
   role: "user" | "assistant" | "code";
@@ -29,6 +29,7 @@ const CodeMessage = ({ text }: { text: string }) => {
   return (
     <div className={styles.codeMessage}>
       {text.split("\n").map((line, index) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
         <div key={index}>
           <span>{`${index + 1}. `}</span>
           {line}
@@ -70,6 +71,7 @@ const Chat = ({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -77,7 +79,7 @@ const Chat = ({
   // create a new threadID when chat component created
   useEffect(() => {
     const createThread = async () => {
-      const res = await fetch(`/api/assistants/threads`, {
+      const res = await fetch("/api/assistants/threads", {
         method: "POST",
       });
       const data = await res.json();
@@ -155,13 +157,13 @@ const Chat = ({
 
   // toolCallCreated - log new tool call
   const toolCallCreated = (toolCall) => {
-    if (toolCall.type != "code_interpreter") return;
+    if (toolCall.type !== "code_interpreter") return;
     appendMessage("code", "");
   };
 
   // toolCallDelta - log delta and snapshot for the tool call
   const toolCallDelta = (delta, snapshot) => {
-    if (delta.type != "code_interpreter") return;
+    if (delta.type !== "code_interpreter") return;
     if (!delta.code_interpreter.input) return;
     appendToLastMessage(delta.code_interpreter.input);
   };
@@ -235,14 +237,14 @@ const Chat = ({
       const updatedLastMessage = {
         ...lastMessage,
       };
-      annotations.forEach((annotation) => {
+      for (const annotation of annotations) {
         if (annotation.type === 'file_path') {
           updatedLastMessage.text = updatedLastMessage.text.replaceAll(
             annotation.text,
             `/api/files/${annotation.file_path.file_id}`
           );
         }
-      })
+      }
       return [...prevMessages.slice(0, -1), updatedLastMessage];
     });
     
@@ -252,6 +254,7 @@ const Chat = ({
     <div className={styles.chatContainer}>
       <div className={styles.messages}>
         {messages.map((msg, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <Message key={index} role={msg.role} text={msg.text} />
         ))}
         <div ref={messagesEndRef} />
@@ -265,7 +268,7 @@ const Chat = ({
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
+          placeholder="Empieza una conversación con el asistente."
         />
         <button
           type="submit"

@@ -9,7 +9,10 @@ const TrashIcon = () => (
     height="12"
     width="12"
     fill="#353740"
+    aria-labelledby="deleteIconTitle"
+    role="img"
   >
+    <title id="deleteIconTitle">Delete file</title>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -22,11 +25,12 @@ const FileViewer = () => {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    fetchFiles();
+    /* const interval = setInterval(() => {
       fetchFiles();
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); */
   }, []);
 
   const fetchFiles = async () => {
@@ -70,7 +74,18 @@ const FileViewer = () => {
                 <span className={styles.fileName}>{file.filename}</span>
                 <span className={styles.fileStatus}>{file.status}</span>
               </div>
-              <span onClick={() => handleFileDelete(file.file_id)}>
+              <span 
+                onClick={() => handleFileDelete(file.file_id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleFileDelete(file.file_id);
+                  }
+                }}
+                tabIndex={0}
+                // biome-ignore lint/a11y/useSemanticElements: <explanation>
+                role="button"
+                aria-label={`Delete file ${file.filename}`}
+              >
                 <TrashIcon />
               </span>
             </div>

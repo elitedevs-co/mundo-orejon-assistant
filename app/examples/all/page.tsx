@@ -4,18 +4,29 @@ import React, { useState } from "react";
 import styles from "./page.module.css";
 import Chat from "../../components/chat";
 import WeatherWidget from "../../components/weather-widget";
-import { getWeather } from "../../utils/weather";
 import FileViewer from "../../components/file-viewer";
+import { searchHay } from "@/app/utils/searchHay";
+import { generateWompiLink } from "@/app/utils/wompi";
 
 const FunctionCalling = () => {
   const [weatherData, setWeatherData] = useState({});
 
   const functionCallHandler = async (call) => {
-    if (call?.function?.name !== "get_weather") return;
     const args = JSON.parse(call.function.arguments);
-    const data = getWeather(args.location);
-    setWeatherData(data);
-    return JSON.stringify(data);
+    console.log('call.function: ', call.function);
+    console.log('args: ', args);
+    
+    if (call.function.name === 'searchHay') {
+      const data = await searchHay();
+      return JSON.stringify(data);
+    }
+    
+    if (call.function.name === 'generateWompiLink') {
+      const paymentLink = await generateWompiLink(args.amount);
+      return JSON.stringify({ paymentLink });
+    }
+    
+    return JSON.stringify({});
   };
 
   // return (
@@ -42,7 +53,7 @@ const FunctionCalling = () => {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.column}>
-          <WeatherWidget {...weatherData} />
+          {/* <WeatherWidget {...weatherData} /> */}
           <FileViewer />
         </div>
         <div className={styles.chatContainer}>
