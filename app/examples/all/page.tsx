@@ -7,6 +7,8 @@ import WeatherWidget from "../../components/weather-widget";
 import FileViewer from "../../components/file-viewer";
 import { searchHay } from "@/app/utils/searchHay";
 import { generateWompiLink } from "@/app/utils/wompi";
+import { searchProducts } from "@/app/utils/searchProducts";
+import { getRecommendedProductsByCategory } from "@/app/utils/getRecommendedProductsByCategory";
 
 const FunctionCalling = () => {
   const [weatherData, setWeatherData] = useState({});
@@ -18,6 +20,16 @@ const FunctionCalling = () => {
     
     if (call.function.name === 'searchHay') {
       const data = await searchHay();
+      return JSON.stringify(data);
+    }
+
+    if (call.function.name === 'searchProducts') {
+      const data = await searchProducts(args.name, args.category);
+      return JSON.stringify(data);
+    }
+
+    if (call.function.name === 'getRecommendedProductsByCategory') {
+      const data = await getRecommendedProductsByCategory(args.category);
       return JSON.stringify(data);
     }
     
