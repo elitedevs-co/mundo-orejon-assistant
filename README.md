@@ -1,3 +1,11 @@
+TODO:
+* No sabe que día es hoy, y da información incorrecta de cuando llega el pedido.
+* Cuando se le dice a cali, inventa precios, y los envios nacionales se pagan
+contra-entrega, por lo cual no se suma al detalle del pedido.
+* ¿que pasa con las quejas?
+* puedo pasar mañana por 10 henos (se asume que es heno nacional)
+* juguetes para morder
+
 # OpenAI Assistants API Quickstart
 
 A quick-start template using the OpenAI [Assistants API](https://platform.openai.com/docs/assistants/overview) with [Next.js](https://nextjs.org/docs).
