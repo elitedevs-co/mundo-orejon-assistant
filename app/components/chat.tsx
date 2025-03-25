@@ -275,7 +275,7 @@ const Chat = ({
           className={styles.button}
           disabled={inputDisabled}
         >
-          Send
+          Enviar
         </button>
       </form>
     </div>

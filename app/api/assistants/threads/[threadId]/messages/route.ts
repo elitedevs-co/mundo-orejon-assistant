@@ -4,7 +4,13 @@ import { openai } from "@/app/openai";
 export const runtime = "nodejs";
 
 // Send a new message to a thread
-export async function POST(request, { params: { threadId } }) {
+export async function POST(request, props) {
+  const params = await props.params;
+
+  const {
+    threadId
+  } = params;
+
   const { content } = await request.json();
 
   await openai.beta.threads.messages.create(threadId, {

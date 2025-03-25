@@ -1,7 +1,13 @@
 import { openai } from "@/app/openai";
 
 // Send a new message to a thread
-export async function POST(request, { params: { threadId } }) {
+export async function POST(request, props) {
+  const params = await props.params;
+
+  const {
+    threadId
+  } = params;
+
   const { toolCallOutputs, runId } = await request.json();
 
   const stream = openai.beta.threads.runs.submitToolOutputsStream(
